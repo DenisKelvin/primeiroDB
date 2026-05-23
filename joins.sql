@@ -28,3 +28,19 @@ values
 select * from
 boletim
 inner join notas_boletim on boletim.id_aluno = notas_boletim.id_aluno;
+
+
+create table if not exists historico_alteraçoes(
+    id integer primary key autoincrement,
+    data_hora text default current_timestamp,
+    mensagem text
+);
+
+create trigger aviso
+after  update
+on notas_boletim
+for each row
+begin
+insert into historico_alteraçoes (mensagem)
+values ('mudança realizada em notas_boletim');
+end;
